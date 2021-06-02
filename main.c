@@ -2,6 +2,8 @@
 #include "math.h"
 #include "stdint.h"
 
+#define UNLOCK_PORT 0x4C4F434B
+
 void SystemInit(){}
 void PORTF_init (){
 	 // ENABLE CLOCK FOR PORT F
