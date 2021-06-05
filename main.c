@@ -63,6 +63,34 @@ void LCD_DATA(unsigned char data)
     D_MICRO(0);
     GPIO_PORTA_DATA_R=0x00;            // EN = LOW
 }
+void LCD_init_PORT()
+{
+    // PORT B INITIALIZATION FOR OUTPUT
+    GPIO_PORTB_DIR_R|=0xFF;              // SET DIRECTION AS OUTPUT
+    GPIO_PORTB_DEN_R|=0xFF;              // ENABLE DIGITAL
+    GPIO_PORTB_AMSEL_R&= ~0XFF;          // DISABLE ANALOG
+    GPIO_PORTB_AFSEL_R&= ~0XFF;          // DISABLE ALTERNATE FUNCTION SELECTION
+    GPIO_PORTB_PCTL_R&=~0xFFFFFFFF;      // SELECT GPIO FUNCTIONALITY
+    // PORT A INITIALIZATION FOR LCD CONTROL  (PA5--> RS , PA6 ---> RW , PA7 --> EN)
+    GPIO_PORTA_DIR_R|=0xE0;              // PA5 , PA6 , P7 DIRECTION AS OUTPUT
+    GPIO_PORTA_DEN_R|=0xE0;              // ENABLE DIGITAL
+    GPIO_PORTA_AMSEL_R&= ~0XE0;          // DISABLE ANALOG
+    GPIO_PORTA_AFSEL_R&= ~0XE0;          // DISABLE ALTERNATE FUNCTION SELECTION
+    GPIO_PORTA_PCTL_R&=~0xFFF00000;      // SELECT GPIO FUNCTIONALITY
+    D_MICRO(37);
+    // LCD COMMANDS
+    LCD_COM(0x38);         // FOR 8-BITS 2 LINES IN LCD
+    D_MICRO(37);
+    LCD_COM(0x06);         // FOR CURSOR INCREMENT
+    D_MICRO(37);
+    LCD_COM(0x01);         // CLEAR DISPLAY
+    D_MICRO(37);
+    LCD_COM(0x0F);         // LCD ON ,cursor ON
+    D_MICRO(37);
+    LCD_COM(0x30);         // WAKE UP
+    D_MICRO(37);
+
+ }
 void D_MICRO(int n){
 int i,j;
 for(i=0;i<n;i++)
