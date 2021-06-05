@@ -63,3 +63,23 @@ void LCD_DATA(unsigned char data)
     D_MICRO(0);
     GPIO_PORTA_DATA_R=0x00;            // EN = LOW
 }
+void D_MICRO(int n){
+int i,j;
+for(i=0;i<n;i++)
+for(j=0;j<3;j++)
+{}
+}
+void LCD_showdist(int value){
+    int i=0;
+    int arr[10];
+    int tmp=value;
+    for(i=0 ; value!=0 ; i++){
+        arr[i]=tmp % 10;
+        value /=10;
+        tmp=value;
+    }
+    for(  ; i!=0 ; i-- ){
+        LCD_DATA(arr[i-1] + 48);
+        D_MILLI(20);
+    }
+}
