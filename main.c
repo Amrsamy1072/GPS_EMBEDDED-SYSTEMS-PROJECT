@@ -15,6 +15,14 @@ void PORTF_INIT(){
      GPIO_PORTF_DEN_R |= 0x02;                  // Enable digital in PF1
 }
 
+void LED_Output(unsigned char out) {
+    GPIO_PORTF_DATA_R |= out;
+}
+void TARGET(){
+    if (Dis >= 100){
+            LED_Output(0x02);                      // IF DISTANCE HIGHER THAN 100 , RED LED WILL TURN ON.
+  }
+}
 
 
 //uart initilization
