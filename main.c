@@ -1,4 +1,8 @@
-#
+void CLK(){
+      // ENABLE CLOCK FOR PORT A , B , F
+   SYSCTL_RCGCGPIO_R |=  0x23;
+     while((SYSCTL_PRGPIO_R & 0x23) == 0){};    // Wait until clock is stable
+}
 
 
 
