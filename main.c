@@ -81,6 +81,15 @@ void LCD_DATA(unsigned char data)
     D_MICRO(0);
     GPIO_PORTA_DATA_R=0x00;            // EN = LOW
 }
+void LCD_COM(unsigned char com)
+{
+    GPIO_PORTA_DATA_R=0x00;             // RS=0 RW=0 EN=LOW
+    GPIO_PORTB_DATA_R=com;
+    GPIO_PORTA_DATA_R=0x80;             // EN = HIGH
+    D_MICRO(0);
+    GPIO_PORTA_DATA_R=0x00;
+    if(com <4) D_MILLI(2); else D_MICRO(37);
+}
 
 void LCD_init_PORT()
 {
