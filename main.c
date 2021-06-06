@@ -150,8 +150,17 @@ void LCD_showdist(int value){
     }
 }
 
+void LCD_showword(void)
+{
+    int i;
+    char input[9]="distance=";
 
-
+    for (i = 0 ; i<9 ;i++)
+    {
+        LCD_DATA(input[i]);
+        D_MILLI(20);
+    }
+}
 
 int main()
 {
@@ -167,5 +176,4 @@ int main()
     LCD_showdist(Dis);
     D_MILLI(500);
 }
-
 
