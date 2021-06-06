@@ -41,7 +41,7 @@ void uart(void){
 	UART2_CTL_R |= 0x200;          //to make uart receiver
 	
 	GPIO_PORTD_LOCK_R = UNLOCK_PORT;        // Unlock PORT D
-	GPIO_PORTF_CR_R |= 0xC0;                // Allow changes to PD6 , PD7
+	GPIO_PORTD_CR_R |= 0xC0;                // Allow changes to PD6 , PD7
 	GPIO_PORTD_AFSEL_R |= 0xC0;             //enable alternate function for PD6 & PD7
 	GPIO_PORTD_DEN_R |= 0xC0;               // PD6 & PD7 as digital I/O
 	GPIO_PORTD_PCTL_R = 0x11000000;         // PD6 & PD7 as Tx & Rx of UART2
