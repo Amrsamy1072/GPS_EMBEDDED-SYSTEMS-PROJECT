@@ -1,3 +1,5 @@
+
+
 void CLK(){
       // ENABLE CLOCK FOR PORT A , B , F
    SYSCTL_RCGCGPIO_R |=  0x23;
@@ -24,7 +26,6 @@ void TARGET(){
   }
 }
 
-
 //uart initilization
 void uart(void){
 	SYSCTL_RCGCUART_R |= 0x04; //activate UART2
@@ -35,14 +36,14 @@ void uart(void){
 	UART2_FBRD_R = 11; //fractional part = 0.1667*64 = 11
 	UART2_LCRH_R = 0x70; //8-bit data, no parity, one stop, FIFo.s enabled
 	UART2_CTL_R |= 0x01;	//enable the UART
-	UART2_CTL_R |= 0x200; to make uart receiver
+	UART2_CTL_R |= 0x200; //to make uart receiver
 	
 	GPIO_PORTD_AFSEL_R |= 0xC0; //enable alternate function for PD6 & PD7
 	GPIO_PORTD_DEN_R |= 0xC0; //configure PD6 & PD7 as digital I/O
 	GPIO_PORTD_PCTL_R = 0x11000000; //configure PD6 & PD7 as Tx & Rx of UART1
 	GPIO_PORTD_AMSEL_R &= ~0xC0; //disable analog on PD6 & PD7	
- 	
 }
+
 char UART_Receiver(void)  
 {
 	while((UART2_FR_R&0X10)!=0){};		//to check if receiver fifo is empty or full, if empty wait for the comming data
@@ -54,15 +55,24 @@ char UART_Receiver(void)
 
 
 
-
-
-
-
-
 // Function for Converting from degrees to radian
 double Deg_Rad(double deg){
     return (deg * PI / 180);
 }
+
+// Measuring the distance by longitude and latitude
+double Total_Distance(double long1, double long2, double lat1, double lat2) {
+   double dlong = Deg_Rad(long2 - long1);
+   double dlat = Deg_Rad(lat2 - lat1);
+   double phi1 = Deg_Rad(lat1);
+   double phi2 = Deg_Rad(lat2);
+    // Haversine formula
+   double a = pow(sin((0.5 * dlat)), 2) + cos(phi1) * cos(phi2) * pow(sin((0.5 * dlong)), 2);
+   double d = 2 * R * asin(sqrt(a));
+   Dis = Dis + d;
+   return Dis;
+}
+
 void LCD_DATA(unsigned char data)
 {
     GPIO_PORTA_DATA_R|=0x20;           // RS=1
@@ -71,6 +81,7 @@ void LCD_DATA(unsigned char data)
     D_MICRO(0);
     GPIO_PORTA_DATA_R=0x00;            // EN = LOW
 }
+
 void LCD_init_PORT()
 {
     // PORT B INITIALIZATION FOR OUTPUT
@@ -97,14 +108,15 @@ void LCD_init_PORT()
     D_MICRO(37);
     LCD_COM(0x30);         // WAKE UP
     D_MICRO(37);
+}
 
- }
 void D_MICRO(int n){
 int i,j;
 for(i=0;i<n;i++)
 for(j=0;j<3;j++)
 {}
 }
+
 void LCD_showdist(int value){
     int i=0;
     int arr[10];
@@ -119,3 +131,8 @@ void LCD_showdist(int value){
         D_MILLI(20);
     }
 }
+
+
+
+
+
