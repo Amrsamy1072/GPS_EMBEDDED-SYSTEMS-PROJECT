@@ -1,6 +1,5 @@
 #include "initial.h"
 
-
 void CLK(){
       // ENABLE CLOCK FOR PORT A , B , F
    SYSCTL_RCGCGPIO_R |=  0x23;
@@ -57,8 +56,6 @@ char UART_Receiver(void)
 
 
 
-
-
 // Function for Converting from degrees to radian
 double Deg_Rad(double deg){
     return (deg * PI / 180);
@@ -85,6 +82,7 @@ void LCD_DATA(unsigned char data)
     D_MICRO(0);
     GPIO_PORTA_DATA_R=0x00;            // EN = LOW
 }
+
 void LCD_COM(unsigned char com)
 {
     GPIO_PORTA_DATA_R=0x00;             // RS=0 RW=0 EN=LOW
@@ -129,12 +127,14 @@ for(i=0;i<n;i++)
 for(j=0;j<3;j++)
 {}
 }
+
 void D_MILLI(int n){
 int i,j;
 for(i=0;i<n;i++)
 for(j=0;j<3180;j++)
 {}
 }
+
 void LCD_showdist(int value){
     int i=0;
     int arr[10];
