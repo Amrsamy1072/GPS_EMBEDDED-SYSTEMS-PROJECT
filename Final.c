@@ -45,11 +45,11 @@ bool GPS_stat()
   if (t == '$')
   { array[0]=t;
     t = GTC();
+   
     if (t == 'G')
     { array[1]=t;
       t = GTC();
     
- 
       if (t == 'P')
 
       { array[2]=t;
@@ -147,13 +147,13 @@ long double get_lon ()
       }
 			lon[11]='\n';
        return GpsToDecimalDegrees(lon);
-		}
+      }
 
 
 //4
 void CLK(){
       // ENABLE CLOCK FOR PORT A , B , F
-   SYSCTL_RCGCGPIO_R |=  0x23;
+     SYSCTL_RCGCGPIO_R |=  0x23;
      while((SYSCTL_PRGPIO_R & 0x23) == 0){};    // Wait until clock is stable
 }
 
@@ -281,12 +281,12 @@ void LCD_showword(void)
 
 int main()
 {
-	long double lon2=0;
-  long double lat2=0;
-	long double lat1=0;
-	long double lon1=0;
-	char charray[8]={0};
-	bool x=false;
+    long double lon2=0;
+    long double lat2=0;
+    long double lat1=0;
+    long double lon1=0;
+    char charray[8]={0};
+    bool x=false;
 	
     CLK();
     PORTF_INIT();
@@ -305,24 +305,24 @@ int main()
 	
  while(1){
 	x=GPS_stat();
-	  if (x==true){
-	 getdata();
-		  lon2=get_lon ();
-		  lat2=get_lat ();
-		 Dis = Total_Distance (lon1,  lon2,  lat1,  lat2);
-			     sprintf(charray, "%2.2f", Dis);
-			 lat1=lat2;
-			 lon1=lon2;
-	  LCD_COM(0x01);
-    LCD_COM(0x80);
-    D_MILLI(500);
-    LCD_showword();
-    D_MILLI(1);
-		LCD_printS(charray);
-    D_MILLI(500);
-			if (Dis > 100) {
-GPIO_PORTF_DATA_R|=0X06;
-			}
+	if (x==true){
+	getdata();
+	lon2=get_lon ();
+	lat2=get_lat ();
+        Dis = Total_Distance (lon1,  lon2,  lat1,  lat2);
+	sprintf(charray, "%2.2f", Dis);
+	lat1=lat2;
+	lon1=lon2;
+	LCD_COM(0x01);
+        LCD_COM(0x80);
+        D_MILLI(500);
+        LCD_showword();
+        D_MILLI(1);
+	LCD_printS(charray);
+        D_MILLI(500);
+	if (Dis > 100) {
+                     GPIO_PORTF_DATA_R|=0X06;
+		       }
 
 			
 		
@@ -337,27 +337,3 @@ GPIO_PORTF_DATA_R|=0X06;
 		 continue;
 	 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
