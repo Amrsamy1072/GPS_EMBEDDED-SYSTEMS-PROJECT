@@ -88,6 +88,67 @@ bool GPS_stat()
    return false;
 }
 //3
+  void  getdata()
+  {
+   
+          int i=1;
+          for(;i<40;i++)
+          {
+              array[i+6]=GTC();
+              if(array[i+6]=='\n'||array[i+6]=='\r')
+							
+              break;
+          }
+                
+  }
+
+	long double GpsToDecimalDegrees(const char* nmeaPos)
+{
+  long double v= 0;
+  if(strlen(nmeaPos)>5)
+  {
+    char integerPart[3+1];
+    int digitCount= (nmeaPos[4]=='.' ? 2 : 3);
+    memcpy(integerPart, nmeaPos, digitCount);
+    integerPart[digitCount]= 0;
+    nmeaPos+= digitCount;
+    v= atoi(integerPart) + atof(nmeaPos)/60.;
+	return v;
+  }
+}
+
+	long double get_lat ()
+{
+	   
+	     
+        int i=7;
+        int j=0;
+	      char lat[11]={0};	
+        for(;i<=16;i++)
+       {
+             lat[j]=array[i];
+               j++;
+       }
+			 lat[10]='\n';
+        return GpsToDecimalDegrees(lat);
+}
+		 
+		 
+long double get_lon ()
+{
+	
+        int i=20;
+         int j=0;
+	      char lon[12]={0};
+        for(i=20;i<=30;i++)
+      {
+            lon[j]=array[i];
+             j++;
+      }
+			lon[11]='\n';
+       return GpsToDecimalDegrees(lon);
+		}
+
 
 //4
 void CLK(){
