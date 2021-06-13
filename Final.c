@@ -26,6 +26,67 @@ void uart5_write(uint8_t data){
     UART0_DR_R = data;
 }
 //2
+
+ unsigned char GTC()
+{
+    char data;
+    while ((UART5_FR_R & 0x10) != 0)
+    {
+    }
+    data = UART5_DR_R;
+    return (unsigned char)data;
+}
+
+bool GPS_stat()
+{
+  char t = GTC();
+ 
+  
+  if (t == '$')
+  { array[0]=t;
+    t = GTC();
+    if (t == 'G')
+    { array[1]=t;
+      t = GTC();
+    
+ 
+      if (t == 'P')
+
+      { array[2]=t;
+        t = GTC();
+   
+        if (t == 'G')
+        { array[3]=t;
+          t = GTC();
+    
+          if (t == 'L')
+          {array[4]=t;
+            t = GTC();
+       
+             if (t == 'L')
+             { array[5]=t;
+              t = GTC();
+      
+              if (t == ',')
+              {array[6]=t;
+                t = GTC();
+                if (t == ',')
+                {
+                  return false;
+                }
+                else
+                {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+   return false;
+}
 //3
 
 //4
