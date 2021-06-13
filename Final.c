@@ -77,7 +77,68 @@ long double get_lon ()
 
 
 
+void CLK(){
+      // ENABLE CLOCK FOR PORT A , B , F
+   SYSCTL_RCGCGPIO_R |=  0x23;
+     while((SYSCTL_PRGPIO_R & 0x23) == 0){};    // Wait until clock is stable
+}
 
+void PORTF_INIT(){
+     // PORT F INITIALIZATION for RED LED
+     GPIO_PORTF_LOCK_R = UNLOCK_PORT;           // Unlock PORTF
+     GPIO_PORTF_CR_R |= 0x02;                   // Allow changes to PF1 (RED COLOR)
+     GPIO_PORTF_AMSEL_R &= ~0x02;               // Disable analog for PF1
+     GPIO_PORTF_AFSEL_R &= ~0x02;               // Disable alternate function for PF1
+     GPIO_PORTF_PCTL_R &= ~0X000000F0;          // Select GPIO functionality
+     GPIO_PORTF_DIR_R |= 0x02;                  // Set direction of PF1 as output
+     GPIO_PORTF_DEN_R |= 0x02;                  // Enable digital in PF1
+}
+
+void LED_Output(unsigned char out) {
+    GPIO_PORTF_DATA_R |= out;
+}
+void TARGET(){
+    if (Dis >= 100){
+            LED_Output(0x02);                      // IF DISTANCE HIGHER THAN 100 , RED LED WILL TURN ON.
+  }
+}
+
+// Function for Converting from degrees to radian
+long double Deg_Rad(long double deg){
+    return (deg * PI / 180);
+}
+
+// Measuring the distance by longitude and latitude
+long double Total_Distance(long double long1,long double long2,long double lat1,long double lat2) {
+ long double dlong = Deg_Rad(long2 - long1);
+ long double dlat = Deg_Rad(lat2 - lat1);
+ long double phi1 = Deg_Rad(lat1);
+ long double phi2 = Deg_Rad(lat2);
+    // Haversine formula
+  long double a = pow(sin((0.5 * dlat)), 2) + cos(phi1) * cos(phi2) * pow(sin((0.5 * dlong)), 2);
+  long double d = 2 * R * asin(sqrt(a));
+   Dis = Dis + d;
+   return Dis;
+}
+
+void LCD_DATA(unsigned char data)
+{
+    GPIO_PORTA_DATA_R|=0x20;           // RS=1
+    GPIO_PORTB_DATA_R=data;
+    GPIO_PORTA_DATA_R|=0x80;           // EN = HIGH
+    D_MICRO(0);
+    GPIO_PORTA_DATA_R=0x00;            // EN = LOW
+}
+
+void LCD_COM(unsigned char com)
+{
+    GPIO_PORTA_DATA_R=0x00;             // RS=0 RW=0 EN=LOW
+    GPIO_PORTB_DATA_R=com;
+    GPIO_PORTA_DATA_R=0x80;             // EN = HIGH
+    D_MICRO(0);
+    GPIO_PORTA_DATA_R=0x00;
+    if(com <4) D_MILLI(2); else D_MICRO(37);
+}
 
 
 
