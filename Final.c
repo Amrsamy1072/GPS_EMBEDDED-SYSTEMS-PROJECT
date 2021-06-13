@@ -218,7 +218,64 @@ void LCD_showword(void)
 
 //6
 
+int main()
+{
+	long double lon2=0;
+  long double lat2=0;
+	long double lat1=0;
+	long double lon1=0;
+	char charray[8]={0};
+	bool x=false;
+	
+    CLK();
+    PORTF_INIT();
+    TARGET();
+    LCD_init_PORT();
+    UART5_Init();
+	while(1)
+		{
+    x=GPS_stat();
+	 
+	 if (x==true){
+		  getdata();
+		  lat1=get_lat ();
+		  lon1=get_lon ();
 
+	
+ while(1){
+	x=GPS_stat();
+	  if (x==true){
+	 getdata();
+		  lon2=get_lon ();
+		  lat2=get_lat ();
+		 Dis = Total_Distance (lon1,  lon2,  lat1,  lat2);
+			     sprintf(charray, "%2.2f", Dis);
+			 lat1=lat2;
+			 lon1=lon2;
+	  LCD_COM(0x01);
+    LCD_COM(0x80);
+    D_MILLI(500);
+    LCD_showword();
+    D_MILLI(1);
+		LCD_printS(charray);
+    D_MILLI(500);
+			if (Dis > 100) {
+GPIO_PORTF_DATA_R|=0X06;
+			}
+
+			
+		
+		 }
+			else
+				continue;
+     }
+	
+
+     }
+	 else
+		 continue;
+	 }
+}
 
 
 
