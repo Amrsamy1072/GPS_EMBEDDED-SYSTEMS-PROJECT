@@ -331,7 +331,7 @@ int main()
 	LCD_printS(charray);
         D_MILLI(500);
 	if (Dis > 100) {
-                     GPIO_PORTF_DATA_R|=0X06;
+                     GPIO_PORTF_DATA_R|=0X02;
 		       }
 
 			
