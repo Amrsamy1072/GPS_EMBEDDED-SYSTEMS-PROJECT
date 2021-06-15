@@ -27,14 +27,14 @@ void uart5_write(uint8_t data){
 }
 //2
 
- unsigned char GTC()
+char GTC()
 {
-    char data;
+    
     while ((UART5_FR_R & 0x10) != 0)
     {
     }
-    data = UART5_DR_R;
-    return (unsigned char)data;
+   
+    return ( UART5_DR_R&0xFF);
 }
 
 bool GPS_stat()
@@ -183,16 +183,26 @@ long double Deg_Rad(long double deg){
 }
 
 // Measuring the distance by longitude and latitude
-long double Total_Distance(long double long1,long double long2,long double lat1,long double lat2) {
- long double dlong = Deg_Rad(long2 - long1);
- long double dlat = Deg_Rad(lat2 - lat1);
- long double phi1 = Deg_Rad(lat1);
- long double phi2 = Deg_Rad(lat2);
-    // Haversine formula
-  long double a = pow(sin((0.5 * dlat)), 2) + cos(phi1) * cos(phi2) * pow(sin((0.5 * dlong)), 2);
-  long double d = 2 * R * asin(sqrt(a));
-   Dis = Dis + d;
-   return Dis;
+float Total_Distance(float long1,float long2,float latx1,float latx2)
+{
+    /* converting all coordinates to radian */
+    float lat1 = Deg_Rad(latx1);
+    float lon1 = Deg_Rad(long1);
+    float lat2 = Deg_Rad(latx2);
+    float lon2 = Deg_Rad(long2);
+
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return Dis; /* if it's the same point, the distance between them is zero */
+    }
+    else {
+        double dlon = lon2 - lon1;
+        double dlat = lat2 - lat1;
+      double  dis = sin(dlat / 2) * sin(dlat / 2) + cos(lat1) * cos(lat2) * sin(dlon / 2) * sin(dlon / 2); /* Haversine's Formula */
+        dis = 2 * asin(sqrt(dis));
+        dis = dis * 6371000; /* distance in meters */
+       Dis = Dis + dis;
+        return Dis;
+    }
 }
 
 void LCD_DATA(unsigned char data)
